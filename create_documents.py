@@ -138,7 +138,7 @@ def main():
         if success:
             print(f"  ✓ Generated: {pdf_output}")
             # Clean up .tex file
-            tex_output.unlink()
+            #tex_output.unlink()
         else:
             print(f"  ERROR: Failed to compile PDF")
             print(f"  LaTeX source saved at: {tex_output}")

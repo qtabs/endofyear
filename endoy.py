@@ -384,7 +384,7 @@ def generate_latex_skills(parsed_data: Dict[str, Any]) -> str:
     """
     latex_lines = [
         r'\documentclass[9pt,a4paper]{article}',
-        r'\usepackage[margin=1in]{geometry}',
+        r'\usepackage[top=0.8in, bottom=0.8in, left=1in, right=1in]{geometry}',
         r'\usepackage{array}',
         r'\usepackage{amssymb}',
         r'\usepackage{pifont}',
@@ -399,6 +399,8 @@ def generate_latex_skills(parsed_data: Dict[str, Any]) -> str:
         r'}',
         r'% Target checkbox - static empty circle (no clicking behavior needed)',
         r'\newcommand{\checkbox}[1]{\raisebox{-0.6ex}{\tikz\draw[very thick] (0,0) circle (1.2ex);}}',
+        r'\setlength{\parskip}{0pt}',
+        r'\setlength{\parindent}{0pt}',
         r'',
         r'\begin{document}',
         r'',
@@ -408,22 +410,29 @@ def generate_latex_skills(parsed_data: Dict[str, Any]) -> str:
         r'',
         r'\vspace{0.2cm}',
         r'',
-        r'% Header with labels - 4-column: text | circles block (centered) | spacer | checkbox (right to margin)',
+        r'% Header with labels - 4-column with explicit spacing: text | ability (5 boxes) | importance (3 boxes) | target checkbox',
         r'\noindent',
-        r'\begin{tabular}{@{}p{\dimexpr\textwidth-3cm-2em-1cm\relax}',
-        r'                >{\centering\arraybackslash}p{2.4cm}',
-        r'                p{2em}',
-        r'                >{\centering\arraybackslash}p{1cm}@{}}',
-        r'	& {\small current ability } & & \\',
+        r'\begin{tabular}{@{}p{\dimexpr\textwidth-2.4cm-1.3cm-1cm-3.5em-10pt\relax}',
+        r'                @{\hspace{1em}}>{\centering\arraybackslash}p{2.4cm}',
+        r'                @{\hspace{2.5em}}>{\centering\arraybackslash}p{1.3cm}',
+        r'                @{\hspace{1em}}>{\centering\arraybackslash}p{1cm}@{}}',
+        r'	& {\small current ability } & {\small priority} & \\',
         r'	& \begin{tabular*}{2.4cm}{@{}l@{\extracolsep{\fill}}r@{}}',
         r'    \small poor & \small great',
-        r'  \end{tabular*} & & {\small target} \\',
+        r'  \end{tabular*}',
+        r'  & \begin{tabular*}{1.3cm}{@{}l@{\extracolsep{\fill}}r@{}}',
+        r'    \small low & \small high',
+        r'  \end{tabular*} & {\small target} \\',
         r'\end{tabular}',
         r'',
         r'',
         r'',
-        r'\vspace{0.3cm}',
+        r'\vspace{-2em}',
         r'',
+        r'{\small \textcolor{gray}{(Check the back page for instructions)}}',
+        r'',
+        r'\vspace{1em}',
+
     ]
 
     # Add sections
@@ -449,34 +458,65 @@ def generate_latex_skills(parsed_data: Dict[str, Any]) -> str:
             skill_name = f'skill{skill_counter}'
             skill_counter += 1
 
-            # Create row with 4 columns: text | squares | spacer | circle
             latex_lines.append(
-                r'\noindent\begin{tabular}{@{}p{\dimexpr\textwidth-3cm-2em-1cm\relax}'
+                r'\noindent\begin{tabular}{@{}p{\dimexpr\textwidth-2.4cm-1.3cm-1cm-3.5em-10pt\relax}'
             )
             latex_lines.append(
-                r'                >{\arraybackslash}p{2.4cm}'
+                r'                @{\hspace{1em}}>{\arraybackslash}p{2.4cm}'
             )
             latex_lines.append(
-                r'                p{2em}'
+                r'                @{\hspace{2.5em}}>{\arraybackslash}p{1.3cm}'
             )
             latex_lines.append(
-                r'                >{\centering\arraybackslash}p{1cm}@{}}'
+                r'                @{\hspace{1em}}>{\centering\arraybackslash}p{1cm}@{}}'
             )
-            latex_lines.append(
-                r'		' + item_text + r' &'
-            )
-            latex_lines.append(
+
+            # Build the whole row in one go, no stray spaces
+            row = (
+                f'{item_text} & '
                 r'\begin{tabular*}{2.4cm}{@{}c@{\extracolsep{\fill}}c@{\extracolsep{\fill}}c@{\extracolsep{\fill}}c@{\extracolsep{\fill}}c@{}}'
+                + f'\\ratingcircle{{{skill_name}_ability}}{{1}} & '
+                + f'\\ratingcircle{{{skill_name}_ability}}{{2}} & '
+                + f'\\ratingcircle{{{skill_name}_ability}}{{3}} & '
+                + f'\\ratingcircle{{{skill_name}_ability}}{{4}} & '
+                + f'\\ratingcircle{{{skill_name}_ability}}{{5}}'
+                + r'\end{tabular*} & '
+                r'\begin{tabular*}{1.3cm}{@{}c@{\extracolsep{\fill}}c@{\extracolsep{\fill}}c@{}}'
+                + f'\\ratingcircle{{{skill_name}_importance}}{{1}} & '
+                + f'\\ratingcircle{{{skill_name}_importance}}{{2}} & '
+                + f'\\ratingcircle{{{skill_name}_importance}}{{3}}'
+                + r'\end{tabular*} & '
+                + f'\\checkbox{{{skill_name}_target}}'
             )
-            latex_lines.append(
-                r'\ratingcircle{' + skill_name + r'}{1} & \ratingcircle{' + skill_name + r'}{2} & \ratingcircle{' + skill_name + r'}{3} & \ratingcircle{' + skill_name + r'}{4} & \ratingcircle{' + skill_name + r'}{5}'
-            )
-            latex_lines.append(
-                r'\end{tabular*} & & \checkbox{' + skill_name + r'target}'
-            )
-            latex_lines.append(r'\end{tabular}\\[0.08cm]')
+            latex_lines.append(row)
+
+            latex_lines.append(r'\end{tabular}\\[0.02cm]')
 
         latex_lines.append(r'')
+
+    # Add instructions on second page
+    latex_lines.append(r'\newpage')
+    latex_lines.append(r'')
+    latex_lines.append(r'\section*{Instructions}')
+    latex_lines.append(r'')
+    latex_lines.append(r'\noindent This document is designed to help you identify key transversal academic skills that you might want to strengthen during the next year. Fill it in with as much honesty as you can. You will revise it with your mentor afterwards, so do not worry too much about being objective---rather, try to write what is most representative of your current understanding. There will be plenty of opportunities to make amendments.')
+    latex_lines.append(r'')
+    latex_lines.append(r'\vspace{0.5cm}')
+    latex_lines.append(r'')
+    latex_lines.append(r'\noindent First, go through each of the items and use the first column of checkboxes to self-report your perceived degree of ability at each of them. Use the low end for an absolute lack of ability, and the high end for abilities that are as developed as you would like them to be at the end of your PhD. At this stage, ignore the other two columns.')
+    latex_lines.append(r'')
+    latex_lines.append(r'\vspace{0.5cm}')
+    latex_lines.append(r'')
+    latex_lines.append(r'\noindent Second, evaluate the priority of each of the skills, independently of your current level of ability. A skill is a priority when you deem it generally important and/or it is relevant for your current project. A skill that you do not think you will have use for in a mid-term horizon probably does not deserve a high priority.')
+    latex_lines.append(r'')
+    latex_lines.append(r'\vspace{0.5cm}')
+    latex_lines.append(r'')
+    latex_lines.append(r'\noindent Last, select a set of 2--10 skills you would like to target as learning objectives for the next year. Try to choose those for which you have low ability and high priority, but that also seem exciting to you at this point. Feel free to add additional skills that you deem important but are not included in this document.')
+    latex_lines.append(r'')
+    latex_lines.append(r'\vspace{0.5cm}')
+    latex_lines.append(r'')
+    latex_lines.append(r'\noindent Bring this list with you to the end-of-the-year meeting, where you will have the opportunity to revise and refine the list of priorities for the incoming year.')
+    latex_lines.append(r'')
 
     latex_lines.append(r'\end{document}')
 

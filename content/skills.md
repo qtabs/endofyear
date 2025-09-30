@@ -1,40 +1,50 @@
 # List of potential skills to be acquired during the PhD
 
 ## Core scientific knowledge
-- Knowledge of concepts and literature in the field
-- Knowledge of concepts and literature related to thesis project
+- Knowledge of concepts/literature related to field
+- Knowledge of concepts/literature related to project
 - Critical reading of scientific literature
 - Critical interpretation of scientific results
 
-## Research skills
-- Analytical skills
-- Problem solving/troubleshooting
-- Experimental or study design
-- Data curation and quality control
-- Analysis and interpretation of data
-- Creativity/development of new research directions
-- Responsible conduct of research
-
-## Scientific and interpersonal communication
-- Writing for a scientific audience
-- Writing for a lay audience
-- Oral presentation and digital multimedia skills
-- One-on-one and informal interactions
-- Seeking advice from peers, advisors, and mentors
-
-## Project management and leadership
+## Project planning and management
+- Development of new research directions
+- Indentification of research gaps and questions
 - Planning and organizing projects
-- Managing data, time, and resources
-- Delegating responsibilities
-- Providing instruction and guidance
-- Providing and receiving constructive feedback
+- Managing time and resources
 
-## Teaching and mentoring
-- Lecturing/teaching
-- Leading small groups (e.g., discussion section or lab)
-- Serving as a mentor
+## Research process
+- Experimental or study design
+- Storing and managing data for reproducibility
+- Data curation and quality control
+- Rigourous statistical analysis
+- Scientific programming (python) and automatisation
+- Version control with git
+- Problem solving/troubleshooting
+- Interpretation of data and results
+- Seeking for help in the lab, instute, and online
+
+## Scientific communication
+- Writing abstracts
+- Writing methods
+- Writing results
+- Writing introductions/discussions
+- Tayloring communication to different audiences
+- Oral presentations
+- Crafting posters
+
+## Leadership
+- Providing and receiving constructive feedback
+- Leading small groups
+- Providing instruction and guidance
+- Delegating responsibilities
+- Mentoring
 
 ## Career advancement
 - Identifying and exploring career options
-- Preparing a CV or job-talk
 - Establishing a professional network
+- Acquiring funding
+
+## Transversal academic skills
+- Teaching
+- Reviewing papers / grants
+
